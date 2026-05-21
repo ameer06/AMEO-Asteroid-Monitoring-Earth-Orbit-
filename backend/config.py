@@ -52,6 +52,17 @@ class Settings(BaseSettings):
             {},
         )
 
+    @property
+    def redis_url(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}"
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    class Config:
+        env_file = ".env"
+
 
 def _normalize_database_url(url: str) -> Tuple[str, Dict[str, object]]:
     if url.startswith("postgres://"):
@@ -74,17 +85,6 @@ def _normalize_database_url(url: str) -> Tuple[str, Dict[str, object]]:
 
     connect_args: Dict[str, object] = {"ssl": True} if use_ssl else {}
     return clean_url, connect_args
-
-    @property
-    def redis_url(self) -> str:
-        return f"redis://{self.redis_host}:{self.redis_port}"
-
-    @property
-    def cors_origins_list(self) -> List[str]:
-        return [o.strip() for o in self.cors_origins.split(",")]
-
-    class Config:
-        env_file = ".env"
 
 
 @lru_cache()
