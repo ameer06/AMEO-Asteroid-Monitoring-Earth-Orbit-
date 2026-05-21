@@ -216,7 +216,8 @@ Tests verify:
 
 ## Deploy live
 
-See **[DEPLOY.md](./DEPLOY.md)** for GitHub push steps and one-click deploy on [Render](https://render.com) using `render.yaml`.
+See **[FREE-DEPLOY.md](./FREE-DEPLOY.md)** for a **$0 long-term** full app (Neon + Render).  
+See **[DEPLOY.md](./DEPLOY.md)** for all deploy options.
 
 ---
 
