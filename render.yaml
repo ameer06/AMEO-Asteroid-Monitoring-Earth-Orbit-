@@ -1,21 +1,22 @@
-# $0 full app — use Neon for Postgres (paste DATABASE_URL when deploying).
-# Guide: FREE-DEPLOY.md
+# Render Blueprint — $0 deploy with Neon database (see START-HERE.md)
 
 services:
   - type: web
     name: ameo-api
-    runtime: docker
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: .
+    runtime: python
     plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
+      - key: PYTHONPATH
+        value: .
       - key: NASA_API_KEY
         sync: false
       - key: DATABASE_URL
         sync: false
       - key: CORS_ORIGINS
-        sync: false
+        value: https://frontend-lac-zeta-37.vercel.app
       - key: POLL_INTERVAL_MINUTES
         value: "15"
       - key: ALERT_THRESHOLD_LD
