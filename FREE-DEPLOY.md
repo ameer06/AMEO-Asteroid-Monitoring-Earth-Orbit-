@@ -30,7 +30,7 @@ Neon free tier is for dev/portfolio; it has size limits but **does not expire in
 
 1. [render.com](https://render.com) → **New → Blueprint**.
 2. Connect repo `AMEO-Asteroid-Monitoring-Earth-Orbit-`.
-3. When asked for blueprint file, use **`render-free.yaml`** (not `render.yaml`).
+3. Blueprint uses root **`render.yaml`** (no Render Postgres — use Neon).
 4. Set environment variables when prompted:
 
    | Variable | Value |
