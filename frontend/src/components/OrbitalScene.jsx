@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Billboard, Html, Line, OrbitControls, Stars } from '@react-three/drei'
 import * as THREE from 'three'
+import { TOUCH } from 'three'
 import { useNeoStore } from '../store/neoStore'
 
 const TIER_COLOR = {
@@ -238,18 +239,25 @@ function SceneContent({ orbitDataMap }) {
         dampingFactor={0.08}
         target={[0, 0, 0]}
         enableDamping
+        touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }}
       />
     </>
   )
 }
 
+function getSceneDpr() {
+  if (typeof window === 'undefined') return [1, 1.5]
+  return window.innerWidth < 768 ? [1, 1.25] : [1, 1.7]
+}
+
 export function OrbitalScene({ orbitDataMap = {} }) {
+  const dpr = getSceneDpr()
   return (
     <Canvas
       camera={{ position: [0, 4.8, 7.2], fov: 48, near: 0.01, far: 120 }}
       gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-      dpr={[1, 1.7]}
-      style={{ background: '#02040b' }}
+      dpr={dpr}
+      style={{ background: '#02040b', touchAction: 'none' }}
     >
       <SceneContent orbitDataMap={orbitDataMap} />
     </Canvas>

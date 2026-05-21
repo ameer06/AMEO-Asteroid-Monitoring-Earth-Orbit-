@@ -69,7 +69,7 @@ export default function App() {
       <header className="topbar">
         <div className="topbar-logo">
           <div className="topbar-logo-icon">☄</div>
-          <h1>AMEO <span>Asteroid Monitoring & Earth Orbit</span></h1>
+          <h1>AMEO <span className="topbar-tagline">Asteroid Monitoring & Earth Orbit</span></h1>
         </div>
 
         <div className="topbar-meta">
@@ -102,30 +102,18 @@ export default function App() {
         {/* ── Right column top: NEO Table or Leaderboard ──────────────── */}
         <section className="panel">
           <div className="panel-header">
-            <div style={{ display: 'flex', gap: 4 }}>
+            <div className="panel-tabs">
               <button
                 id="tab-table"
+                type="button"
+                className={`panel-tab-btn ${activeTab === 'table' ? 'active' : ''}`}
                 onClick={() => setActiveTab('table')}
-                style={{
-                  background: activeTab === 'table' ? 'rgba(79,158,255,0.15)' : 'transparent',
-                  border: activeTab === 'table' ? '1px solid var(--accent-blue)' : '1px solid var(--border)',
-                  borderRadius: 6, padding: '4px 12px', cursor: 'pointer',
-                  color: activeTab === 'table' ? 'var(--accent-blue)' : 'var(--text-muted)',
-                  fontSize: 11, fontWeight: 600, letterSpacing: '0.06em',
-                  fontFamily: 'var(--font-ui)',
-                }}
               >NEO FEED</button>
               <button
                 id="tab-risk"
+                type="button"
+                className={`panel-tab-btn ${activeTab === 'risk' ? 'active' : ''}`}
                 onClick={() => setActiveTab('risk')}
-                style={{
-                  background: activeTab === 'risk' ? 'rgba(79,158,255,0.15)' : 'transparent',
-                  border: activeTab === 'risk' ? '1px solid var(--accent-blue)' : '1px solid var(--border)',
-                  borderRadius: 6, padding: '4px 12px', cursor: 'pointer',
-                  color: activeTab === 'risk' ? 'var(--accent-blue)' : 'var(--text-muted)',
-                  fontSize: 11, fontWeight: 600, letterSpacing: '0.06em',
-                  fontFamily: 'var(--font-ui)',
-                }}
               >RISK RANK</button>
             </div>
           </div>

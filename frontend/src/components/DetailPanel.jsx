@@ -134,7 +134,7 @@ export function DetailPanel() {
               <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 4 }}>
                 Closest Approach (30-day window)
               </div>
-              <div style={{ display: 'flex', gap: 16 }}>
+              <div className="detail-approach-row">
                 <div>
                   <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Distance: </span>
                   <span className="element-value">{orbitData.closest_approach.km?.toFixed(0)} km</span>

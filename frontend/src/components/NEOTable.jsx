@@ -1,13 +1,13 @@
 import { useNeoStore } from '../store/neoStore'
 
 const COLS = [
-  { key: 'name',                    label: 'Name',           sortable: true  },
-  { key: 'risk_score',              label: 'Risk Score',     sortable: true  },
-  { key: 'risk_tier',               label: 'Tier',           sortable: false },
-  { key: 'estimated_diameter_max_km', label: 'Diam (km)',   sortable: true  },
-  { key: 'miss_distance_ld',        label: 'Miss Dist',      sortable: false },
-  { key: 'relative_velocity_kmps',  label: 'Velocity',       sortable: false },
-  { key: 'pha',                     label: 'PHA',            sortable: false },
+  { key: 'name',                    label: 'Name',           sortable: true,  mobile: true  },
+  { key: 'risk_score',              label: 'Risk Score',     sortable: true,  mobile: true  },
+  { key: 'risk_tier',               label: 'Tier',           sortable: false, mobile: true  },
+  { key: 'estimated_diameter_max_km', label: 'Diam (km)',   sortable: true,  mobile: false },
+  { key: 'miss_distance_ld',        label: 'Miss Dist',      sortable: false, mobile: true  },
+  { key: 'relative_velocity_kmps',  label: 'Velocity',       sortable: false, mobile: false },
+  { key: 'pha',                     label: 'PHA',            sortable: false, mobile: true  },
 ]
 
 function TierBadge({ tier }) {
@@ -62,6 +62,8 @@ export function NEOTable() {
         </span>
       </div>
 
+      <p className="neo-table-scroll-hint" aria-hidden="true">Swipe table → for more columns</p>
+
       {/* Table */}
       <div className="neo-table-wrap">
         {loading ? (
@@ -76,6 +78,7 @@ export function NEOTable() {
                 {COLS.map(col => (
                   <th
                     key={col.key}
+                    className={col.mobile ? '' : 'col-hide-mobile'}
                     onClick={() => col.sortable && setSortBy(col.key)}
                     style={{ cursor: col.sortable ? 'pointer' : 'default' }}
                   >
@@ -101,7 +104,7 @@ export function NEOTable() {
                   onClick={() => setSelectedNeo(neo)}
                   id={`neo-row-${neo.id}`}
                 >
-                  <td>
+                  <td className="col-name">
                     <span style={{ fontWeight: 600, fontSize: 12 }}>{neo.name}</span>
                     {neo.designation && (
                       <span className="mono" style={{ marginLeft: 6, color: 'var(--text-muted)', fontSize: 10 }}>
@@ -122,7 +125,7 @@ export function NEOTable() {
                     </span>
                   </td>
                   <td><TierBadge tier={neo.risk_tier} /></td>
-                  <td className="mono">
+                  <td className="mono col-hide-mobile">
                     {neo.estimated_diameter_max_km != null
                       ? neo.estimated_diameter_max_km.toFixed(3)
                       : '—'}
@@ -130,7 +133,7 @@ export function NEOTable() {
                   <td className="mono" style={{ color: 'var(--accent-cyan)' }}>
                     {neo.miss_distance_ld != null ? `${neo.miss_distance_ld.toFixed(2)} LD` : '—'}
                   </td>
-                  <td className="mono">
+                  <td className="mono col-hide-mobile">
                     {neo.relative_velocity_kmps != null ? `${neo.relative_velocity_kmps.toFixed(1)} km/s` : '—'}
                   </td>
                   <td>
@@ -146,7 +149,7 @@ export function NEOTable() {
       </div>
 
       {/* Pagination */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: 8, borderTop: '1px solid var(--border)', flexShrink: 0 }}>
+      <div className="table-pagination">
         <button
           id="page-prev"
           className="scrubber-btn"
