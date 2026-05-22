@@ -22,13 +22,41 @@ function alertsBase() {
   return root ? `${root}/alerts` : '/alerts'
 }
 
+const API_TIMEOUT_MS = 60000
+
 const api = axios.create({
   baseURL: neosBase(),
-  timeout: 15000,
+  timeout: API_TIMEOUT_MS,
 })
 
-export const getNEOs = (params = {}) =>
-  api.get('', { params }).then(r => ({ ...r.data, demo: false })).catch(() => getDemoNEOs(params))
+async function fetchWithRetry(request, retries = 2) {
+  let lastError
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await request()
+    } catch (err) {
+      lastError = err
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, 2000 * (attempt + 1)))
+      }
+    }
+  }
+  throw lastError
+}
+
+export const getNEOs = async (params = {}) => {
+  const root = getApiRoot()
+  if (!root) {
+    return getDemoNEOs(params)
+  }
+  try {
+    const r = await fetchWithRetry(() => api.get('', { params }))
+    return { ...r.data, demo: false }
+  } catch {
+    console.warn('AMEO: API unreachable, using demo data. Check VITE_API_URL and Render ameo-api status.')
+    return getDemoNEOs(params)
+  }
+}
 
 export const getNEO = (id) =>
   api.get(`/${id}`).then(r => ({ ...r.data, demo: false })).catch(() => getDemoNEO(id))
@@ -43,7 +71,7 @@ export const getNEOHistory = (id, limit = 50) =>
   api.get(`/${id}/history`, { params: { limit } }).then(r => r.data).catch(() => getDemoHistory(id, limit))
 
 export const getAlertLog = (limit = 50) =>
-  axios.get(`${alertsBase()}/log`, { params: { limit }, timeout: 15000 }).then(r => r.data).catch(() => [])
+  axios.get(`${alertsBase()}/log`, { params: { limit }, timeout: API_TIMEOUT_MS }).then(r => r.data).catch(() => [])
 
 // ── WebSocket helper ──────────────────────────────────────────────────────────
 export function createAlertSocket(onMessage, onOpen, onClose) {
