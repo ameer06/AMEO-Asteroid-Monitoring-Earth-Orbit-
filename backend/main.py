@@ -64,6 +64,18 @@ app.include_router(neos.router)
 app.include_router(alerts.router)
 
 
+@app.get("/", tags=["Meta"])
+async def root():
+    """Friendly root — visiting the API URL in a browser is not an error."""
+    return {
+        "service": "AMEO NEO Risk & Trajectory API",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/health",
+        "neos": "/neos",
+    }
+
+
 @app.get("/health", tags=["Meta"])
 async def health():
     return {"status": "ok", "version": "1.0.0"}
